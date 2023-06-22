@@ -32,8 +32,8 @@ This documentation guides you in setting up a cluster with one master node and t
 
    ```sh
    sudo yum install -y yum-utils
-   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
-   sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
+   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo -y
+   sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
    ```
 1. Start Docker services 
    ```sh
@@ -78,7 +78,7 @@ This documentation guides you in setting up a cluster with one master node and t
     ```
 1. Install Kubernetes
     ```sh
-    yum install -y kubeadm kubelet kubectl
+    yum install -y kubeadm kubelet kubectl -y
     ```
 1. Enable and Start kubelet service
     ```sh
