@@ -136,6 +136,11 @@ rm -rf /etc/containerd/config.toml
 
 systemctl restart containerd
 
+if - sysctl net.ipv4.ip_forward
+net.ipv4.ip_forward = 0 then change it to 1 by doing -->>
+
+sysctl -w net.ipv4.ip_forward=1
+
 ----------------------------------------
 # For label change
  kubectl label node ip-172-31-86-115.ec2.internal kubernetes.io/role=worker --overwrite=true
