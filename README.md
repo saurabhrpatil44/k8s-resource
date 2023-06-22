@@ -1,7 +1,7 @@
 # k8s-resource
 
 # Kubernetes Cluster installation using kubeadm
-Follow this documentation to set up a Kubernetes cluster on **REDHAT** machines.
+Follow this documentation to set up a Kubernetes cluster on **CENTOS 7 and redhat distribution except AWS redhat** machines.
 
 This documentation guides you in setting up a cluster with one master node and two worker nodes.
 
@@ -32,8 +32,8 @@ This documentation guides you in setting up a cluster with one master node and t
 
    ```sh
    sudo yum install -y yum-utils
-   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo -y
-   sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin -y
+   sudo yum-config-manager --add-repo https://download.docker.com/linux/centos/docker-ce.repo
+   sudo yum install docker-ce docker-ce-cli containerd.io docker-compose-plugin
    ```
 1. Start Docker services 
    ```sh
@@ -78,7 +78,7 @@ This documentation guides you in setting up a cluster with one master node and t
     ```
 1. Install Kubernetes
     ```sh
-    yum install -y kubeadm kubelet kubectl -y
+    yum install -y kubeadm kubelet kubectl
     ```
 1. Enable and Start kubelet service
     ```sh
@@ -92,20 +92,17 @@ This documentation guides you in setting up a cluster with one master node and t
     ```
 1. Create a user for kubernetes administration  and copy kube config file.   
     ``To be able to use kubectl command to connect and interact with the cluster, the user needs kube config file.``  
-    In this case, we are creating a user called `kubeadmin`
     ```sh
-    useradd kubeadmin 
-    mkdir /home/kubeadmin/.kube
-    cp /etc/kubernetes/admin.conf /home/kubeadmin/.kube/config
-    chown -R kubeadmin:kubeadmin /home/kubeadmin/.kube
+    mkdir -p $HOME/.kube
+    sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+    sudo chown $(id -u):$(id -g) $HOME/.kube/config
     ```
-1. Deploy Calico network as a __kubeadmin__ user. 
-	> This should be executed as a user (heare as a __kubeadmin__ )
+1. Deploy Calico network. 
+	> This should be executed as a user where config file is copied
     
     ```sh
-    sudo su - kubeadmin 
-    curl https://docs.projectcalico.org/manifests/calico.yaml -o calico.yaml
-    kubectl apply -f calico.yaml
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/tigera-operator.yaml
+    kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.1/manifests/custom-resources.yaml
     ```
 
 1. Cluster join command
@@ -128,7 +125,6 @@ This documentation guides you in setting up a cluster with one master node and t
     ```sh
     kubectl get cs
     ```
-
 
 # RUN-TIME ERROR HANDLE
 
